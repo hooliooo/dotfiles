@@ -1,0 +1,6 @@
+require("telescope").setup()
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader><leader>", builtin.find_files, { desc = "Find files via Telescope" })
+vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope Live Grep" })
+vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find in buffers via Telescope" })
+vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find help tags via Telescope" })

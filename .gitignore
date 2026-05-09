@@ -1,0 +1,11 @@
+# macOS junk
+.DS_Store
+
+# Neovim temp files (if they are inside your nvim folder)
+nvim/undo/
+nvim/spell/
+nvim/*.log
+
+# vim.pack temporary data (if you don't want to track the actual plugin code)
+# Note: DO NOT ignore nvim-pack-lock.json
+
