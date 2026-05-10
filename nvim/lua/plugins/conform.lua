@@ -1,8 +1,20 @@
+local mason_bin = vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "bin")
 require("conform").setup({
   formatters_by_ft = {
+    cs = { "csharpier" },
     lua = { "stylua" },
     -- This merges your previous setup:
     rust = { "rustfmt", lsp_format = "fallback" },
+  },
+  formatters = {
+    csharpier = {
+      command = vim.fs.joinpath(mason_bin, "csharpier"),
+      args = {
+        "format",
+        "--write-stdout",
+      },
+      to_stdin = true,
+    },
   },
 
   -- Replicating LazyVim's Format on Save
@@ -20,4 +32,3 @@ vim.keymap.set({ "n", "v" }, "<leader>cf", function()
     timeout_ms = 500,
   })
 end, { desc = "Format Code" })
-

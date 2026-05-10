@@ -5,28 +5,26 @@ vim.pack.add({
   -- Color Scheme
   { src = "https://github.com/folke/tokyonight.nvim" },
 
-  -- Lualine
+  -- UI
   { src = "https://github.com/nvim-lualine/lualine.nvim" },
-
-  -- File Management
-  { src = "https://github.com/nvim-telescope/telescope.nvim" },
-  { src = "https://github.com/magicduck/grug-far.nvim" },
   { src = "https://github.com/akinsho/bufferline.nvim" },
   { src = "https://github.com/folke/snacks.nvim" },
+
+  -- Search
+  { src = "https://github.com/nvim-telescope/telescope.nvim" },
+  { src = "https://github.com/magicduck/grug-far.nvim" },
 
   -- Formatting
   { src = "https://github.com/stevearc/conform.nvim" },
 
   -- Text Editing
-  { src = "https://github.com/nvim-mini/mini.ai" },
-  { src = "https://github.com/nvim-mini/mini.icons" },
-  { src = "https://github.com/nvim-mini/mini.surround" },
+  { src = "https://github.com/nvim-mini/mini.nvim" },
 
   -- Git
   { src = "https://github.com/tpope/vim-fugitive" },
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
 
-  -- Blink
+  -- Auto Complete
   { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
   { src = "https://github.com/L3MON4D3/LuaSnip", version = "v2.4.1" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
@@ -44,7 +42,7 @@ vim.pack.add({
   -- Icons
   { src = "https://github.com/nvim-tree/nvim-web-devicons" },
 
-  -- Which Key
+  -- Keymap guide
   { src = "https://github.com/folke/which-key.nvim" },
 
   -- Debugging/Diagnostics
@@ -52,6 +50,7 @@ vim.pack.add({
   { src = "https://github.com/rcarriga/nvim-dap-ui" },
   { src = "https://github.com/nvim-neotest/nvim-nio" },
   { src = "https://github.com/theHamsta/nvim-dap-virtual-text" },
+  { src = "https://github.com/NicholasMata/nvim-dap-cs" },
   { src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
 
   -- LSP
@@ -60,6 +59,8 @@ vim.pack.add({
   { src = "https://github.com/mason-org/mason.nvim" },
   { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
   { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
+  ---- CSharp
+  { src = "https://github.com/seblyng/roslyn.nvim.git" },
   ---- Rust
   {
     src = "https://github.com/mrcjkb/rustaceanvim",
@@ -101,6 +102,7 @@ require("plugins.blink")
 require("lsp.mason")
 require("lsp.lspconfig")
 
+require("plugins.csharp-config")
 require("plugins.rust-config")
 
 require("plugins.trouble")

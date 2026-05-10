@@ -3,6 +3,7 @@ local treesitter = require("nvim-treesitter")
 local ensure_installed = {
   "bash",
   "c",
+  "c_sharp",
   "css",
   "dockerfile",
   "gitignore",
