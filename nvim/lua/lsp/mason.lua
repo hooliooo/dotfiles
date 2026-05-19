@@ -30,6 +30,7 @@ mason_tool_installer.setup({
   ensure_installed = {
     "codelldb",
     "csharpier",
+    "ktlint",
     "netcoredbg",
     "roslyn",
   },

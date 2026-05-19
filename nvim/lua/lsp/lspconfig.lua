@@ -42,6 +42,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("i", "<C-h>", function()
       vim.lsp.buf.signature_help()
     end, opts)
+
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client and client.name == "sourcekit" then
+      vim.defer_fn(function()
+        if vim.api.nvim_buf_is_valid(ev.buf) then
+          vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf })
+          vim.defer_fn(function()
+            if vim.api.nvim_buf_is_valid(ev.buf) then
+              vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+            end
+          end, 200)
+        end
+      end, 4000)
+    end
   end,
 })
 
@@ -111,20 +125,16 @@ vim.lsp.config("roslyn", {
 
 -- sourcekit
 vim.lsp.config("sourcekit", {
-  cmd = { "sourcekit-lsp" },
+  cmd = { vim.trim(vim.fn.system("xcrun -f sourcekit-lsp")) },
   filetypes = { "swift" },
-  root_markers = { ".git", "compile_commands.json", ".sourcekit-lsp", "Package.swift" },
-  capabilities = {
-    workspace = {
-      didChangeWatchedFiles = { dynamicRegistration = true },
-    },
-    textDocument = {
-      diagnostic = {
-        dynamicRegistration = true,
-        relatedDocumentSupport = true,
-      },
-    },
-  },
+  root_dir = function(bufnr, on_dir)
+    local fname = vim.api.nvim_buf_get_name(bufnr)
+    local dir = vim.fs.dirname(fname)
+    local root = vim.fs.root(dir, { "Package.swift" })
+      or vim.fs.root(dir, { "buildServer.json" })
+      or vim.fs.root(dir, { ".git" })
+    on_dir(root)
+  end,
 })
 
 vim.lsp.enable({
@@ -132,3 +142,5 @@ vim.lsp.enable({
   "roslyn",
   "sourcekit",
 })
+
+vim.lsp.inlay_hint.enable(true)

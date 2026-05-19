@@ -12,11 +12,13 @@ local ensure_installed = {
   "http",
   "java",
   "json",
+  "kotlin",
   "lua",
   "markdown",
   "markdown_inline",
   "regex",
   "rust",
+  "swift",
   "tsx",
   "typescript",
   "vim",
@@ -31,7 +33,12 @@ vim.api.nvim_create_autocmd("FileType", {
     local buf = args.buf
     local ft = vim.bo[buf].filetype
     -- enable indentation only for real languages
-    if ft ~= "yaml" and ft ~= "markdown" then
+    if ft == "kotlin" then
+      -- Bypass Tree-sitter and enforce native smartindent for Kotlin
+      vim.bo[buf].indentexpr = ""
+      vim.bo[buf].smartindent = true
+      vim.bo[buf].cindent = false
+    elseif ft ~= "yaml" and ft ~= "markdown" then
       vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
       vim.bo[buf].smartindent = false
       vim.bo[buf].cindent = false

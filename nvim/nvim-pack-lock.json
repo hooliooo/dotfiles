@@ -34,6 +34,10 @@
       "rev": "21790e59dd0109a92a70cb874dd002af186314f5",
       "src": "https://github.com/magicduck/grug-far.nvim"
     },
+    "kotlin.nvim": {
+      "rev": "a571cae2f5f23d9ca35e2e64e4d5d7fd8a8eb06d",
+      "src": "https://github.com/AlexandrosAlexiou/kotlin.nvim"
+    },
     "lualine.nvim": {
       "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
@@ -105,6 +109,14 @@
     "nvim-web-devicons": {
       "rev": "2795c26c916bb3c57dde308b82be51971fa92747",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    "oil.nvim": {
+      "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",
+      "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "plantuml.nvim": {
+      "rev": "acd1162b3ad23d2d51b0ca98eb54116dfbf8210f",
+      "src": "https://github.com/charlesnicholson/plantuml.nvim"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",

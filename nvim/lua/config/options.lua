@@ -1,31 +1,37 @@
-vim.o.termguicolors = true
-vim.o.nu = true
-vim.o.relativenumber = true
+vim.opt.nu = true
+vim.opt.relativenumber = true
 
-vim.o.shiftwidth = 2
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.expandtab = true
 
 -- backup and undo
-vim.o.swapfile = false
-vim.o.backup = false
-vim.o.undodir = vim.fn.stdpath("data") .. "/undodir"
-vim.o.undofile = true
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
+vim.opt.undofile = true
 
 -- search
-vim.o.inccommand = "split"
+vim.opt.inccommand = "split"
 
 -- UI
-vim.o.scrolloff = 8
-vim.o.signcolumn = "yes"
+vim.opt.scrolloff = 8
+vim.opt.signcolumn = "yes"
+vim.opt.cmdheight = 0
+vim.opt.termguicolors = true
 
 -- window splits
-vim.o.splitright = true
-vim.o.splitbelow = true
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 
 -- misc
-vim.o.updatetime = 50
-vim.o.colorcolumn = "0"
-vim.o.clipboard = "unnamedplus"
-vim.o.mouse = "a"
-vim.o.cmdheight = 1
-vim.o.confirm = true
-vim.o.autowrite = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.laststatus = 3
+vim.opt.updatetime = 50
+vim.opt.colorcolumn = "0"
+vim.opt.clipboard:append("unnamedplus")
+vim.opt.isfname:append("@-@")
+vim.opt.mouse = "a"
+vim.opt.confirm = true
+vim.opt.autowrite = true
