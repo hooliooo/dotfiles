@@ -22,6 +22,10 @@
       "rev": "694357861ec9ebf12475ddcdd04ea45a0923c32d",
       "src": "https://github.com/saecki/crates.nvim"
     },
+    "filler-begone.nvim": {
+      "rev": "122018c0f54519b9ee16fb0e31b96989a7682e1c",
+      "src": "https://github.com/saghen/filler-begone.nvim"
+    },
     "friendly-snippets": {
       "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"

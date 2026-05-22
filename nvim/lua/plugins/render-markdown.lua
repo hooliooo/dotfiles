@@ -16,6 +16,13 @@ local color_fg = "#1F2335"
 -- vim.cmd(string.format([[highlight Headline6Bg guifg=%s guibg=%s gui=bold]], color_fg, color6_bg))
 
 require("render-markdown").setup({
+  file_types = { "markdown", "nofile", "noice" },
+  win_config = {
+    floating = {
+      rendered_by_cmp = true, -- Enables support inside completion/hover blocks
+    },
+  },
+
   restart_highlighter = true,
   heading = {
     sign = true,

@@ -15,6 +15,7 @@ vim.pack.add({
   { src = "https://github.com/folke/trouble.nvim" },
   { src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
   { src = "https://github.com/stevearc/oil.nvim" },
+  { src = "https://github.com/saghen/filler-begone.nvim" },
 
   -- Search
   { src = "https://github.com/nvim-telescope/telescope.nvim" },

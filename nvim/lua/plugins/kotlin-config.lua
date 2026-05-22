@@ -15,4 +15,14 @@ require("kotlin").setup({
     "-XX\\:+HeapDumpOnOutOfMemoryError",
     "-Dfile.encoding\\=UTF-8",
   },
+  inlay_hints = {
+    parameters = true,
+    parameters_compiled = true,
+    types_property = true,
+    types_variable = true,
+    function_return = true,
+    function_parameter = true,
+    lambda_return = true,
+    lambda_receivers_parameters = true,
+  },
 })

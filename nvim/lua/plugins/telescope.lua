@@ -4,3 +4,4 @@ vim.keymap.set("n", "<leader><leader>", builtin.find_files, { desc = "Find files
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope Live Grep" })
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find in buffers via Telescope" })
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find help tags via Telescope" })
+vim.keymap.set("n", "<leader>fs", builtin.lsp_document_symbols, { desc = "Find LSP symbols in current buffer via Telescope" })
