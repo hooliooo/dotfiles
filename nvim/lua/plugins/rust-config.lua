@@ -28,8 +28,12 @@ vim.g.rustaceanvim = {
     default_settings = {
       ["rust-analyzer"] = {
         cargo = { allFeatures = true },
-        check = { command = "clippy", allFeatures = true },
-        checkOnSave = true,
+        check = { command = "clippy", allTargets = true },
+        procMacro = { enable = true },
+        diagnostics = { experimental = { enable = true } },
+        inlayHints = {
+          lifetimeElisionHints = { enable = "skip_trivial" },
+        },
       },
     },
   },

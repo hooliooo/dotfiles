@@ -1,0 +1,48 @@
+set showmode
+set showcmd
+set relativenumber number
+set clipboard+=unnamed
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+
+let mapleader = " "
+
+set nerdtree
+
+" Open NERDTree (use q to exit)
+map <leader>E :NERDTreeToggle<CR>
+map <leader>fF <Action>(SearchEverywhere)
+
+map <S-h> <Action>(PreviousTab)
+map <S-l> <Action>(NextTab)
+
+" map <C-p> <Action>(EditorLookupUp)
+" map <C-n> <Action>(EditorLookupDown)
+
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+" Buffer Management
+nmap <leader>bd <Action>(CloseContent)
+nmap <leader>bo <Action>(CloseAllEditorsButActive)
+
+" LSP Stuff
+nmap <leader>gr <Action>(ShowUsages)
+nmap <leader>gI <Action>(GotoImplementation)
+nmap <leader>gd <Action>(GotoDeclaration)
+nmap <leader>gt <Action>(GotoTypeDeclaration)
+nmap <leader>gs <Action>(GotoSuperMethod)
+" Code Actions
+nmap <leader>cr <Action>(RenameElement)
+nmap <leader>cs <Action>(ActivateStructureToolWindow)
+nmap <leader>ca <Action>(ShowIntentionActions)
+
+" File Navigation
+nmap <leader><leader> <Action>(GotoFile)
+nmap <leader>fg <Action>(FindInPath)
+nmap <leader>fb <Action>(Switcher)
+nmap <leader>fh <Action>(HelpTopics)
+nmap <leader>fs <Action>(FileStructurePopup)
