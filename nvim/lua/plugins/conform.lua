@@ -5,7 +5,7 @@ require("conform").setup({
     lua = { "stylua" },
     kotlin = { "ktlint" },
     -- This merges your previous setup:
-    rust = { "rustfmt", lsp_format = "fallback" },
+    rust = { "trim_whitespace", "rustfmt", lsp_format = "fallback" },
     swift = { "swiftformat" },
   },
   formatters = {

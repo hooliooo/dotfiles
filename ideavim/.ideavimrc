@@ -1,48 +1,202 @@
+" =============================================================================
+" .ideavimrc — mirrors ~/.config/nvim (dotfiles/nvim)
+" Verify any <Action> id with `:actionlist <pattern>` inside the IDE.
+" =============================================================================
+
+" --- Options (mirrors lua/config/options.lua) --------------------------------
 set showmode
 set showcmd
 set relativenumber number
+set scrolloff=8
 set clipboard+=unnamed
+set clipboard+=ideaput
 
 set ignorecase
 set smartcase
 set incsearch
 set hlsearch
 
+" IDE integration
+set ideajoin
+set idearefactormode=keep
+set ideamarks
+
+" --- Emulated plugins (mirrors lua/plugins/mini.lua + nvim built-ins) --------
+set NERDTree
+set surround           " mini.surround
+set commentary         " gc / gcc (nvim 0.10 built-in)
+set highlightedyank
+set matchit
+set argtextobj         " partial mini.ai
+set textobj-entire     " partial mini.ai
+set which-key
+" notimeout keeps the which-key popup open until a key is pressed; with
+" timeout the sequence expires after timeoutlen and takes the popup with it.
+set notimeout
+set timeoutlen=300
+let g:WhichKey_DefaultDelay = 300
+
 let mapleader = " "
 
-set nerdtree
-
-" Open NERDTree (use q to exit)
-map <leader>E :NERDTreeToggle<CR>
-map <leader>fF <Action>(SearchEverywhere)
-
-map <S-h> <Action>(PreviousTab)
-map <S-l> <Action>(NextTab)
-
-" map <C-p> <Action>(EditorLookupUp)
-" map <C-n> <Action>(EditorLookupDown)
-
+" --- Core (lua/config/keymaps.lua) ------------------------------------------
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
+nnoremap <Esc> :nohlsearch<CR>
+nmap <leader>uh <Action>(ToggleInlayHintsGloballyAction)
 
-" Buffer Management
+" --- Buffers / tabs (bufferline.lua, snacks.lua) ----------------------------
+map <S-h> <Action>(PreviousTab)
+map <S-l> <Action>(NextTab)
 nmap <leader>bd <Action>(CloseContent)
 nmap <leader>bo <Action>(CloseAllEditorsButActive)
 
-" LSP Stuff
-nmap <leader>gr <Action>(ShowUsages)
-nmap <leader>gI <Action>(GotoImplementation)
-nmap <leader>gd <Action>(GotoDeclaration)
-nmap <leader>gt <Action>(GotoTypeDeclaration)
-nmap <leader>gs <Action>(GotoSuperMethod)
-" Code Actions
-nmap <leader>cr <Action>(RenameElement)
-nmap <leader>cs <Action>(ActivateStructureToolWindow)
-nmap <leader>ca <Action>(ShowIntentionActions)
+" --- File explorer (snacks.lua) ---------------------------------------------
+map <leader>e :NERDTreeToggle<CR>
+nmap <leader>E <Action>(ActivateProjectToolWindow)
 
-" File Navigation
+" --- LSP (lua/lsp/lspconfig.lua) --------------------------------------------
+nmap gd <Action>(GotoDeclaration)
+nmap gD <Action>(GotoDeclaration)
+nmap gr <Action>(FindUsages)
+nmap gI <Action>(GotoImplementation)
+nmap gt <Action>(GotoTypeDeclaration)
+nmap K  <Action>(QuickJavaDoc)
+imap <C-h> <Action>(ParameterInfo)
+
+nmap <leader>ca <Action>(ShowIntentionActions)
+vmap <leader>ca <Action>(ShowIntentionActions)
+nmap <leader>cr <Action>(RenameElement)
+nmap <leader>cf <Action>(ReformatCode)
+vmap <leader>cf <Action>(ReformatCode)
+nmap <leader>cs <Action>(ActivateStructureToolWindow)
+" nvim uses <leader>d, but that is the debug group prefix here and `notimeout`
+" means a prefix mapping can never fire — moved into the diagnostics group.
+nmap <leader>xd <Action>(ShowErrorDescription)
+nmap <leader>D  <Action>(ActivateProblemsViewToolWindow)
+
+" IDE extras (no nvim counterpart)
+nmap gS <Action>(GotoSuperMethod)
+nmap <leader>fF <Action>(SearchEverywhere)
+
+" --- File navigation (telescope.lua) ----------------------------------------
 nmap <leader><leader> <Action>(GotoFile)
 nmap <leader>fg <Action>(FindInPath)
 nmap <leader>fb <Action>(Switcher)
 nmap <leader>fh <Action>(HelpTopics)
 nmap <leader>fs <Action>(FileStructurePopup)
+
+" --- Search / replace (grug-far.lua, todo-comments.lua) ---------------------
+nmap <leader>sr <Action>(ReplaceInPath)
+vmap <leader>sr <Action>(ReplaceInPath)
+nmap <leader>st <Action>(ActivateTODOToolWindow)
+nmap <leader>sT <Action>(ActivateTODOToolWindow)
+
+" --- Diagnostics / quickfix (trouble.lua) -----------------------------------
+nmap <leader>xx <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>xX <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>xq <Action>(ActivateFindToolWindow)
+nmap <leader>xl <Action>(ActivateFindToolWindow)
+nmap <leader>xt <Action>(ActivateTODOToolWindow)
+nmap ]d <Action>(GotoNextError)
+nmap [d <Action>(GotoPreviousError)
+
+" --- Git (git-config.lua: fugitive + gitsigns) ------------------------------
+nmap <leader>gg <Action>(ActivateCommitToolWindow)
+nmap ]h <Action>(VcsShowNextChangeMarker)
+nmap [h <Action>(VcsShowPrevChangeMarker)
+nmap <leader>gs <Action>(Git.Add)
+nmap <leader>gS <Action>(Git.Add)
+nmap <leader>gr <Action>(Vcs.RollbackChangedLines)
+vmap <leader>gr <Action>(Vcs.RollbackChangedLines)
+nmap <leader>gR <Action>(ChangesView.Revert)
+nmap <leader>gp <Action>(VcsShowCurrentChangeMarker)
+nmap <leader>gbl <Action>(Annotate)
+nmap <leader>gB <Action>(Annotate)
+nmap <leader>gd <Action>(Compare.SameVersion)
+nmap <leader>gD <Action>(Vcs.ShowTabbedFileHistory)
+" fugitive buffer-local push/pull, hoisted under <leader>g
+nmap <leader>gP <Action>(Vcs.Push)
+nmap <leader>gl <Action>(Vcs.UpdateProject)
+
+" --- Debug (nvim-dap.lua) ---------------------------------------------------
+nmap <leader>db <Action>(ToggleLineBreakpoint)
+nmap <leader>dB <Action>(ViewBreakpoints)
+nmap <leader>dc <Action>(Resume)
+nmap <leader>da <Action>(ChooseDebugConfiguration)
+nmap <leader>di <Action>(StepInto)
+nmap <leader>do <Action>(StepOut)
+nmap <leader>dO <Action>(StepOver)
+nmap <leader>dt <Action>(Stop)
+nmap <leader>dr <Action>(ActivateDebugToolWindow)
+nmap <leader>du <Action>(ActivateDebugToolWindow)
+nmap <leader>de <Action>(EvaluateExpression)
+vmap <leader>de <Action>(EvaluateExpression)
+
+" --- which-key labels (groups mirror which-key.lua, leaves mirror nvim descs)
+" Child names must be prefixed with the parent group's name.
+let g:WhichKeyDesc_files       = "<leader><leader> Find Files"
+
+let g:WhichKeyDesc_buffer      = "<leader>b buffer"
+let g:WhichKeyDesc_buffer_del  = "<leader>bd Delete Buffer"
+let g:WhichKeyDesc_buffer_oth  = "<leader>bo Delete Other Buffers"
+
+let g:WhichKeyDesc_code        = "<leader>c code"
+let g:WhichKeyDesc_code_action = "<leader>ca Code Actions"
+let g:WhichKeyDesc_code_rename = "<leader>cr Rename"
+let g:WhichKeyDesc_code_format = "<leader>cf Format Code"
+let g:WhichKeyDesc_code_symb   = "<leader>cs Symbols (Structure)"
+
+let g:WhichKeyDesc_debug       = "<leader>d debug"
+let g:WhichKeyDesc_debug_break = "<leader>db Toggle Breakpoint"
+let g:WhichKeyDesc_debug_brkls = "<leader>dB View Breakpoints"
+let g:WhichKeyDesc_debug_cont  = "<leader>dc Continue"
+let g:WhichKeyDesc_debug_args  = "<leader>da Run with Args"
+let g:WhichKeyDesc_debug_into  = "<leader>di Step Into"
+let g:WhichKeyDesc_debug_out   = "<leader>do Step Out"
+let g:WhichKeyDesc_debug_over  = "<leader>dO Step Over"
+let g:WhichKeyDesc_debug_term  = "<leader>dt Terminate"
+let g:WhichKeyDesc_debug_repl  = "<leader>dr REPL"
+let g:WhichKeyDesc_debug_ui    = "<leader>du Dap UI"
+let g:WhichKeyDesc_debug_eval  = "<leader>de Eval"
+
+let g:WhichKeyDesc_explorer    = "<leader>e File Explorer"
+let g:WhichKeyDesc_projectview = "<leader>E Project View"
+
+let g:WhichKeyDesc_find        = "<leader>f file/find"
+let g:WhichKeyDesc_find_grep   = "<leader>fg Live Grep"
+let g:WhichKeyDesc_find_bufs   = "<leader>fb Buffers"
+let g:WhichKeyDesc_find_help   = "<leader>fh Help Tags"
+let g:WhichKeyDesc_find_symb   = "<leader>fs Document Symbols"
+let g:WhichKeyDesc_find_every  = "<leader>fF Search Everywhere"
+
+let g:WhichKeyDesc_git         = "<leader>g git"
+let g:WhichKeyDesc_git_status  = "<leader>gg Git Status (Commit)"
+let g:WhichKeyDesc_git_stage   = "<leader>gs Stage hunk"
+let g:WhichKeyDesc_git_stagebuf = "<leader>gS Stage buffer"
+let g:WhichKeyDesc_git_reset   = "<leader>gr Reset hunk"
+let g:WhichKeyDesc_git_resetbuf = "<leader>gR Reset buffer"
+let g:WhichKeyDesc_git_preview = "<leader>gp Preview hunk"
+let g:WhichKeyDesc_git_blame   = "<leader>gbl Blame line"
+let g:WhichKeyDesc_git_blametog = "<leader>gB Toggle line blame"
+let g:WhichKeyDesc_git_diff    = "<leader>gd Diff this"
+let g:WhichKeyDesc_git_hist    = "<leader>gD File History"
+let g:WhichKeyDesc_git_push    = "<leader>gP Push"
+let g:WhichKeyDesc_git_pull    = "<leader>gl Pull (Update Project)"
+
+let g:WhichKeyDesc_search      = "<leader>s search"
+let g:WhichKeyDesc_search_repl = "<leader>sr Search and Replace"
+let g:WhichKeyDesc_search_todo = "<leader>st Todo"
+let g:WhichKeyDesc_search_todoT = "<leader>sT Todo (all)"
+
+let g:WhichKeyDesc_ui          = "<leader>u ui"
+let g:WhichKeyDesc_ui_hints    = "<leader>uh Toggle Inlay Hints"
+
+let g:WhichKeyDesc_diagnostics = "<leader>x diagnostics/quickfix"
+let g:WhichKeyDesc_diagnostics_all = "<leader>xx Diagnostics"
+let g:WhichKeyDesc_diagnostics_buf = "<leader>xX Buffer Diagnostics"
+let g:WhichKeyDesc_diagnostics_qf  = "<leader>xq Quickfix List"
+let g:WhichKeyDesc_diagnostics_loc = "<leader>xl Location List"
+let g:WhichKeyDesc_diagnostics_todo = "<leader>xt Todos"
+let g:WhichKeyDesc_diagnostics_line = "<leader>xd Line Diagnostics"
+
+let g:WhichKeyDesc_diagbuf     = "<leader>D Buffer Diagnostics"

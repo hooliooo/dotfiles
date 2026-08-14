@@ -40,6 +40,12 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.bo[buf].indentexpr = ""
       vim.bo[buf].smartindent = true
       vim.bo[buf].cindent = false
+    elseif ft == "cs" then
+      -- nvim-treesitter has no c_sharp indents query, so its indentexpr is a no-op.
+      -- Use native cindent (brace-based) instead — ideal for C#.
+      vim.bo[buf].indentexpr = ""
+      vim.bo[buf].smartindent = false
+      vim.bo[buf].cindent = true
     elseif ft ~= "yaml" and ft ~= "markdown" then
       vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
       vim.bo[buf].smartindent = false

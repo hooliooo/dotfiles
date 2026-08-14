@@ -17,10 +17,10 @@ local color_fg = "#1F2335"
 
 require("render-markdown").setup({
   file_types = { "markdown", "nofile", "noice" },
-  win_config = {
-    floating = {
-      rendered_by_cmp = true, -- Enables support inside completion/hover blocks
-    },
+  -- Render markdown inside blink.cmp completion/documentation popups
+  -- (replaces the removed win_config.floating.rendered_by_cmp option)
+  completions = {
+    blink = { enabled = true },
   },
 
   restart_highlighter = true,

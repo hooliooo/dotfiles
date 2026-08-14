@@ -20,7 +20,6 @@ require("nvim-dap-virtual-text").setup({})
 -- 3. Setup DAP UI
 local dap, dapui = require("dap"), require("dapui")
 dapui.setup({})
-require("dap-cs").setup()
 
 -- Auto open/close UI
 dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -43,16 +42,29 @@ end
 -- 5. Highlight and Signs (Visual markers)
 vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticError" })
+vim.fn.sign_define("DapBreakpointCondition", { text = "◆", texthl = "DiagnosticWarn" })
+vim.fn.sign_define("DapLogPoint", { text = "◉", texthl = "DiagnosticInfo" })
+vim.fn.sign_define("DapBreakpointRejected", { text = "○", texthl = "DiagnosticError" })
 vim.fn.sign_define("DapStopped", { text = "▶", texthl = "DiagnosticInfo", linehl = "DapStoppedLine" })
-
+-- stylua: ignore start
 -- 6. Keymaps (Integrated with Which-Key descriptions)
 local map = vim.keymap.set
 map("n", "<leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
+map("n", "<leader>dB", function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, { desc = "Conditional Breakpoint" })
 map("n", "<leader>dc", function() dap.continue() end, { desc = "Continue" })
+map("n", "<leader>dC", function() dap.run_to_cursor() end, { desc = "Run to Cursor" })
 map("n", "<leader>da", function() dap.continue({ before = get_args }) end, { desc = "Run with Args" })
+map("n", "<leader>dl", function() dap.run_last() end, { desc = "Run Last" })
 map("n", "<leader>di", function() dap.step_into() end, { desc = "Step Into" })
 map("n", "<leader>do", function() dap.step_out() end, { desc = "Step Out" })
 map("n", "<leader>dO", function() dap.step_over() end, { desc = "Step Over" })
+map("n", "<leader>dj", function() dap.down() end, { desc = "Frame Down" })
+map("n", "<leader>dk", function() dap.up() end, { desc = "Frame Up" })
+map("n", "<leader>dg", function() dap.goto_() end, { desc = "Go to Line (No Execute)" })
+map("n", "<leader>dp", function() dap.pause() end, { desc = "Pause" })
 map("n", "<leader>dt", function() dap.terminate() end, { desc = "Terminate" })
+map("n", "<leader>dr", function() dap.repl.toggle() end, { desc = "REPL" })
 map("n", "<leader>du", function() dapui.toggle() end, { desc = "Dap UI" })
+map("n", "<leader>dw", function() require("dap.ui.widgets").hover() end, { desc = "Widget Hover" })
 map({"n", "v"}, "<leader>de", function() dapui.eval() end, { desc = "Eval" })
+-- stylua: ignore end

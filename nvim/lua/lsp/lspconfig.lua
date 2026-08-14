@@ -31,7 +31,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
 
     opts.desc = "Show line diagnostics"
-    vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+    vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts)
 
     opts.desc = "Show documentation for what is under cursor"
     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -83,7 +83,7 @@ local roslyn_cmd = {
   "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
   -- "--razorSourceGenerator=" .. vim.fs.joinpath(rzls_path, "Microsoft.CodeAnalysis.Razor.Compiler.dll"),
   -- "--razorDesignTimePath=" .. vim.fs.joinpath(rzls_path, "Targets", "Microsoft.NET.Sdk.Razor.DesignTime.targets"),
-  "--extension",
+  -- "--extension",
   -- vim.fs.joinpath(rzls_path, "RazorExtension", "Microsoft.VisualStudioCode.RazorExtension.dll"),
 }
 vim.lsp.config("roslyn", {
@@ -130,9 +130,7 @@ vim.lsp.config("sourcekit", {
   root_dir = function(bufnr, on_dir)
     local fname = vim.api.nvim_buf_get_name(bufnr)
     local dir = vim.fs.dirname(fname)
-    local root = vim.fs.root(dir, { "Package.swift" })
-      or vim.fs.root(dir, { "buildServer.json" })
-      or vim.fs.root(dir, { ".git" })
+    local root = vim.fs.root(dir, { "Package.swift" }) or vim.fs.root(dir, { "buildServer.json" }) or vim.fs.root(dir, { ".git" })
     on_dir(root)
   end,
 })

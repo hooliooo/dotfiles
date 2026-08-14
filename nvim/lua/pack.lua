@@ -46,7 +46,6 @@ vim.pack.add({
   { src = "https://github.com/rcarriga/nvim-dap-ui" },
   { src = "https://github.com/nvim-neotest/nvim-nio" },
   { src = "https://github.com/theHamsta/nvim-dap-virtual-text" },
-  { src = "https://github.com/NicholasMata/nvim-dap-cs" },
 
   -- LSP
   { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
@@ -56,6 +55,7 @@ vim.pack.add({
   { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
   ---- CSharp
   { src = "https://github.com/seblyng/roslyn.nvim.git" },
+  { src = "https://github.com/GustavEikaas/easy-dotnet.nvim" },
   ---- Kotlin
   { src = "https://github.com/AlexandrosAlexiou/kotlin.nvim" },
   ---- Rust
@@ -67,6 +67,9 @@ vim.pack.add({
 
   -- PlantUML
   { src = "https://github.com/charlesnicholson/plantuml.nvim" },
+
+  -- Live Preview (Markdown/HTML/AsciiDoc/SVG in a browser)
+  { src = "https://github.com/brianhuster/live-preview.nvim" },
 })
 -- Syntax & Highlighting
 require("plugins.treesitter")
@@ -110,6 +113,7 @@ require("plugins.trouble")
 require("plugins.todo-comments")
 
 require("plugins.plantuml")
+require("plugins.live-preview")
 
 -- Which key
 require("plugins.which-key")
