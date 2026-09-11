@@ -27,7 +27,7 @@ vim.g.rustaceanvim = {
     default_settings = {
       ["rust-analyzer"] = {
         cargo = {
-          allFeatures = true,
+          allFeatures = false,
           -- Separate target dir so cargo build/run/debug never block on
           -- rust-analyzer's check lock (and vice versa)
           targetDir = true,
