@@ -24,5 +24,6 @@ mason_tool_installer.setup({
     "lua-language-server",
     "netcoredbg",
     "roslyn",
+    "taplo",
   },
 })

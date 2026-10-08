@@ -5,6 +5,12 @@ vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.expandtab = true
 
+-- No remote plugins use these; skip the provider lookups (and checkhealth warnings)
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 -- backup and undo
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -37,4 +43,6 @@ vim.opt.clipboard:append("unnamedplus")
 vim.opt.isfname:append("@-@")
 vim.opt.mouse = "a"
 vim.opt.confirm = true
+-- Sessions: skip empty/help/terminal windows, which do not restore cleanly
+vim.opt.sessionoptions = { "buffers", "curdir", "folds", "tabpages", "winsize" }
 vim.opt.autowrite = true

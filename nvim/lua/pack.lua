@@ -46,7 +46,6 @@ vim.pack.add({
 
   -- Auto Complete
   { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
-  { src = "https://github.com/L3MON4D3/LuaSnip", version = "v2.4.1" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
 
   -- Keymap guide
@@ -59,7 +58,9 @@ vim.pack.add({
   { src = "https://github.com/theHamsta/nvim-dap-virtual-text" },
 
   -- LSP
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+  -- Queries only; used by mini.ai for function/class text objects
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/mason-org/mason.nvim" },
   { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },

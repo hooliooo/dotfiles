@@ -19,6 +19,7 @@ local ensure_installed = {
   "regex",
   "rust",
   "swift",
+  "toml",
   "tsx",
   "typescript",
   "vim",
@@ -32,7 +33,7 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(args)
     local buf = args.buf
     local ft = vim.bo[buf].filetype
-    -- enable indentation only for real languages
+
     if ft == "kotlin" then
       -- Bypass Tree-sitter and enforce native smartindent for Kotlin
       vim.bo[buf].indentexpr = ""
@@ -44,28 +45,22 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.bo[buf].indentexpr = ""
       vim.bo[buf].smartindent = false
       vim.bo[buf].cindent = true
-    elseif ft ~= "yaml" and ft ~= "markdown" then
-      vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-      vim.bo[buf].smartindent = false
-      vim.bo[buf].cindent = false
     end
 
     local lang = vim.treesitter.language.get_lang(ft)
-
-    if not lang then
+    if not lang or not pcall(vim.treesitter.language.add, lang) or not pcall(vim.treesitter.start, buf, lang) then
       return
     end
 
-    -- load parser safely
-    local ok_add = pcall(vim.treesitter.language.add, lang)
-    if not ok_add then
-      return
-    end
+    vim.wo.foldmethod = "expr"
+    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
-    -- start treesitter safely
-    if pcall(vim.treesitter.start, buf, lang) then
-      vim.wo.foldmethod = "expr"
-      vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    -- Tree-sitter indentation only where the parser ships an indents query;
+    -- everything else keeps the filetype's own indent settings
+    if ft ~= "kotlin" and ft ~= "cs" and ft ~= "yaml" and ft ~= "markdown" and vim.treesitter.query.get(lang, "indents") then
+      vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      vim.bo[buf].smartindent = false
+      vim.bo[buf].cindent = false
     end
   end,
 })

@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts)
 
     opts.desc = "Restart LSP"
-    vim.keymap.set("n", "<leader>rs", ":lsp restart<CR>", opts)
+    vim.keymap.set("n", "<leader>cl", "<cmd>lsp restart<CR>", opts)
   end,
 })
 
@@ -129,6 +129,7 @@ vim.lsp.config("sourcekit", {
 vim.lsp.enable({
   "lua_ls",
   "sourcekit",
+  "taplo",
 })
 
 vim.lsp.inlay_hint.enable(true)

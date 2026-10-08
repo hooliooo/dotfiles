@@ -4,8 +4,7 @@ require("conform").setup({
     cs = { "csharpier" },
     lua = { "stylua" },
     kotlin = { "ktlint" },
-    -- This merges your previous setup:
-    rust = { "trim_whitespace", "rustfmt", lsp_format = "fallback" },
+    rust = { "rustfmt", lsp_format = "fallback" },
     swift = { "swift" }, -- Apple's swift-format, via `swift format`
   },
   formatters = {
@@ -19,11 +18,13 @@ require("conform").setup({
     },
   },
 
-  -- Replicating LazyVim's Format on Save
-  format_on_save = {
-    timeout_ms = 2500,
-    lsp_format = "fallback",
-  },
+  -- Format on save, unless turned off globally (<leader>uF) or per buffer (<leader>uf)
+  format_on_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    return { timeout_ms = 2500, lsp_format = "fallback" }
+  end,
 })
 
 -- Keymap for manual formatting (LazyVim: <leader>cf)
@@ -34,3 +35,12 @@ vim.keymap.set({ "n", "v" }, "<leader>cf", function()
     timeout_ms = 2500,
   })
 end, { desc = "Format Code" })
+
+vim.keymap.set("n", "<leader>uf", function()
+  vim.b.disable_autoformat = not vim.b.disable_autoformat
+  vim.notify("Format on save (buffer): " .. (vim.b.disable_autoformat and "off" or "on"))
+end, { desc = "Toggle format on save (buffer)" })
+vim.keymap.set("n", "<leader>uF", function()
+  vim.g.disable_autoformat = not vim.g.disable_autoformat
+  vim.notify("Format on save (global): " .. (vim.g.disable_autoformat and "off" or "on"))
+end, { desc = "Toggle format on save (global)" })

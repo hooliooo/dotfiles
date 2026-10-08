@@ -56,10 +56,4 @@ require("blink.cmp").setup({
     use_nvim_cmp_as_default = false,
     nerd_font_variant = "mono",
   },
-
-  snippets = {
-    preset = "luasnip",
-  },
 })
-
-require("luasnip.loaders.from_vscode").lazy_load()

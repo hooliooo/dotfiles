@@ -49,6 +49,7 @@ require("render-markdown").setup({
     right_pad = 1,
   },
   bullet = { enabled = true },
+  latex = { enabled = false },
   checkbox = {
     enabled = true,
     unchecked = { icon = " 󰄱 " },
