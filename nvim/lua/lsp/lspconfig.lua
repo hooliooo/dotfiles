@@ -1,3 +1,5 @@
+-- Built-in defaults cover the rest: grr (references), grt (type definition),
+-- gri (implementation), grn (rename), gra (code action), K (hover), <C-s> (signature help, insert)
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
   callback = function(ev)
@@ -10,14 +12,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     opts.desc = "Goto Declaration"
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 
-    opts.desc = "References"
-    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-
     opts.desc = "Goto Implementation"
     vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
-
-    opts.desc = "Goto Type Definition"
-    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
 
     opts.desc = "See available code actions"
     vim.keymap.set({ "n", "x" }, "<leader>ca", function()
@@ -27,21 +23,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     opts.desc = "Rename"
     vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, opts)
 
-    opts.desc = "Show buffer diagnostics"
-    vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
-
     opts.desc = "Show line diagnostics"
     vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts)
 
-    opts.desc = "Show documentation for what is under cursor"
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-
     opts.desc = "Restart LSP"
     vim.keymap.set("n", "<leader>rs", ":lsp restart<CR>", opts)
-
-    vim.keymap.set("i", "<C-h>", function()
-      vim.lsp.buf.signature_help()
-    end, opts)
 
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if client and client.name == "sourcekit" then
@@ -56,6 +42,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
       end, 4000)
     end
+  end,
+})
+
+-- Show LSP progress (e.g. indexing) as native progress messages
+vim.api.nvim_create_autocmd("LspProgress", {
+  group = vim.api.nvim_create_augroup("UserLspProgress", {}),
+  callback = function(ev)
+    local value = ev.data.params.value
+    vim.api.nvim_echo({ { value.message or "done" } }, false, {
+      id = "lsp." .. ev.data.params.token,
+      kind = "progress",
+      source = "vim.lsp",
+      title = value.title,
+      status = value.kind ~= "end" and "running" or "success",
+      percent = value.percentage,
+    })
   end,
 })
 
@@ -74,23 +76,9 @@ vim.lsp.config("lua_ls", {
   },
 })
 
--- roslyn
-
-local roslyn_cmd = {
-  "roslyn",
-  "--stdio",
-  "--logLevel=Information",
-  "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
-  -- "--razorSourceGenerator=" .. vim.fs.joinpath(rzls_path, "Microsoft.CodeAnalysis.Razor.Compiler.dll"),
-  -- "--razorDesignTimePath=" .. vim.fs.joinpath(rzls_path, "Targets", "Microsoft.NET.Sdk.Razor.DesignTime.targets"),
-  -- "--extension",
-  -- vim.fs.joinpath(rzls_path, "RazorExtension", "Microsoft.VisualStudioCode.RazorExtension.dll"),
-}
+-- roslyn: roslyn.nvim provides cmd/filetypes/root_dir and enables the server;
+-- this only adds settings on top
 vim.lsp.config("roslyn", {
-  cmd = roslyn_cmd,
-  -- handlers = require("rzls.roslyn_handlers"),
-  filetypes = { "cs" },
-  root_markers = { { ".sln", ".csproj", "project.json" }, ".git" },
   settings = {
     ["csharp|inlay_hints"] = {
       csharp_enable_inlay_hints_for_implicit_object_creation = true,
@@ -115,17 +103,15 @@ vim.lsp.config("roslyn", {
       dotnet_show_completion_items_from_unimported_namespaces = true,
     },
     ["csharp|background_analysis"] = {
-      background_analysis = {
-        dotnet_analyzer_diagnostics_scope = "fullSolution",
-        dotnet_compiler_diagnostics_scope = "fullSolution",
-      },
+      dotnet_analyzer_diagnostics_scope = "fullSolution",
+      dotnet_compiler_diagnostics_scope = "fullSolution",
     },
   },
 })
 
 -- sourcekit
 vim.lsp.config("sourcekit", {
-  cmd = { vim.trim(vim.fn.system("xcrun -f sourcekit-lsp")) },
+  cmd = { "xcrun", "sourcekit-lsp" },
   filetypes = { "swift" },
   root_dir = function(bufnr, on_dir)
     local fname = vim.api.nvim_buf_get_name(bufnr)
@@ -137,8 +123,8 @@ vim.lsp.config("sourcekit", {
 
 vim.lsp.enable({
   "lua_ls",
-  "roslyn",
   "sourcekit",
 })
 
 vim.lsp.inlay_hint.enable(true)
+vim.lsp.codelens.enable(true)

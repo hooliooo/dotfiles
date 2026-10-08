@@ -27,8 +27,6 @@ local ensure_installed = {
 
 treesitter.install(ensure_installed)
 
-vim.treesitter.language.register("markdown", "noice")
-
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function(args)
@@ -65,6 +63,9 @@ vim.api.nvim_create_autocmd("FileType", {
     end
 
     -- start treesitter safely
-    pcall(vim.treesitter.start, buf, lang)
+    if pcall(vim.treesitter.start, buf, lang) then
+      vim.wo.foldmethod = "expr"
+      vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end
   end,
 })

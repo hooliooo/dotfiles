@@ -12,4 +12,8 @@ require("tiny-inline-diagnostic").setup({
 
 -- IMPORTANT: You must disable Neovim's default diagnostic text
 -- or they will clash/double-up on your screen.
-vim.diagnostic.config({ virtual_text = false })
+vim.diagnostic.config({
+  virtual_text = false,
+  severity_sort = true,
+  float = { border = "rounded" },
+})

@@ -18,7 +18,10 @@ vim.opt.inccommand = "split"
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.cmdheight = 0
+vim.opt.showcmd = false -- avoids flicker from filler-begone with ui2
 vim.opt.termguicolors = true
+vim.opt.winborder = "rounded"
+vim.opt.foldlevelstart = 99 -- open files unfolded; treesitter folds via foldexpr
 
 -- window splits
 vim.opt.splitright = true
@@ -28,8 +31,8 @@ vim.opt.splitbelow = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.laststatus = 3
-vim.opt.updatetime = 50
-vim.opt.colorcolumn = "0"
+vim.opt.updatetime = 250
+vim.opt.colorcolumn = ""
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.isfname:append("@-@")
 vim.opt.mouse = "a"

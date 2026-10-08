@@ -1,3 +1,19 @@
+-- Post-install/update hooks. Registered before vim.pack.add() so they also
+-- fire for installs from the lockfile
+vim.api.nvim_create_autocmd("PackChanged", {
+  group = vim.api.nvim_create_augroup("UserPackHooks", {}),
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    -- Keep compiled parsers in step with nvim-treesitter's queries
+    if name == "nvim-treesitter" and kind == "update" then
+      if not ev.data.active then
+        vim.cmd.packadd("nvim-treesitter")
+      end
+      vim.cmd("TSUpdate")
+    end
+  end,
+})
+
 -- Plugins
 vim.pack.add({
   { src = "https://github.com/nvim-lua/plenary.nvim" },
@@ -9,16 +25,12 @@ vim.pack.add({
   { src = "https://github.com/akinsho/bufferline.nvim" },
   { src = "https://github.com/nvim-lualine/lualine.nvim" },
   { src = "https://github.com/folke/snacks.nvim" },
-  { src = "https://github.com/folke/noice.nvim" },
-  { src = "https://github.com/MunifTanjim/nui.nvim" },
-  { src = "https://github.com/nvim-tree/nvim-web-devicons" },
   { src = "https://github.com/folke/trouble.nvim" },
   { src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/saghen/filler-begone.nvim" },
 
   -- Search
-  { src = "https://github.com/nvim-telescope/telescope.nvim" },
   { src = "https://github.com/magicduck/grug-far.nvim" },
 
   -- Formatting
@@ -51,7 +63,6 @@ vim.pack.add({
   { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/mason-org/mason.nvim" },
-  { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
   { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
   ---- CSharp
   { src = "https://github.com/seblyng/roslyn.nvim.git" },
@@ -78,10 +89,8 @@ require("plugins.treesitter")
 require("plugins.snacks")
 require("plugins.bufferline")
 require("plugins.lualine")
-require("plugins.noice")
 
 -- File Management
-require("plugins.telescope")
 require("plugins.grug-far")
 
 -- Formatting

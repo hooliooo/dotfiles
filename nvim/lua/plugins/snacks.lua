@@ -39,3 +39,16 @@ end, { desc = "Delete Buffer" })
 vim.keymap.set("n", "<leader>bo", function()
   Snacks.bufdelete.other()
 end, { desc = "Delete Other Buffers" })
+
+-- Pickers
+-- stylua: ignore start
+vim.keymap.set("n", "<leader><leader>", function() Snacks.picker.files() end, { desc = "Find files" })
+vim.keymap.set("n", "<leader>fg", function() Snacks.picker.grep() end, { desc = "Live grep" })
+vim.keymap.set("n", "<leader>fb", function() Snacks.picker.buffers() end, { desc = "Find buffers" })
+vim.keymap.set("n", "<leader>fh", function() Snacks.picker.help() end, { desc = "Find help tags" })
+vim.keymap.set("n", "<leader>fs", function() Snacks.picker.lsp_symbols() end, { desc = "Find LSP symbols in current buffer" })
+vim.keymap.set("n", "<leader>D", function() Snacks.picker.diagnostics_buffer() end, { desc = "Show buffer diagnostics" })
+vim.keymap.set("n", "<leader>sT", function()
+  Snacks.picker.pick(vim.tbl_extend("force", require("todo-comments.snacks").source, { title = "Todos" }))
+end, { desc = "Todo (Snacks)" })
+-- stylua: ignore end

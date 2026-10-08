@@ -1,5 +1,5 @@
 require("livepreview.config").set({
-  -- Telescope, mini.pick and snacks are all installed; without this the plugin
+  -- mini.pick and snacks are both installed; without this the plugin
   -- picks whichever it finds first.
   picker = "snacks",
 

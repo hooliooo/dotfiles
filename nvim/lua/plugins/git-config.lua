@@ -32,11 +32,15 @@ require("gitsigns").setup({
     end
 
     -- Navigation
-    map("n", "]h", gs.next_hunk, "Next Hunk")
-    map("n", "[h", gs.prev_hunk, "Prev Hunk")
+    map("n", "]h", function()
+      gs.nav_hunk("next")
+    end, "Next Hunk")
+    map("n", "[h", function()
+      gs.nav_hunk("prev")
+    end, "Prev Hunk")
 
     -- Actions
-    map("n", "<leader>gs", gs.stage_hunk, "Stage hunk")
+    map("n", "<leader>gs", gs.stage_hunk, "Stage/unstage hunk")
     map("n", "<leader>gr", gs.reset_hunk, "Reset hunk")
     map("v", "<leader>gs", function()
       gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
@@ -46,7 +50,6 @@ require("gitsigns").setup({
     end, "Reset hunk")
     map("n", "<leader>gS", gs.stage_buffer, "Stage buffer")
     map("n", "<leader>gR", gs.reset_buffer, "Reset buffer")
-    map("n", "<leader>gu", gs.undo_stage_hunk, "Undo stage hunk")
     map("n", "<leader>gp", gs.preview_hunk, "Preview hunk")
     map("n", "<leader>gbl", function()
       gs.blame_line({ full = true })

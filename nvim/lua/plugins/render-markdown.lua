@@ -7,16 +7,18 @@ local color5_bg = "#7aa2f7"
 local color6_bg = "#c0caf5"
 local color_fg = "#1F2335"
 
--- Heading background
--- vim.cmd(string.format([[highlight Headline1Bg guifg=%s guibg=%s gui=bold]], color_fg, color1_bg))
--- vim.cmd(string.format([[highlight Headline2Bg guifg=%s guibg=%s gui=bold]], color_fg, color2_bg))
--- vim.cmd(string.format([[highlight Headline3Bg guifg=%s guibg=%s gui=bold]], color_fg, color3_bg))
--- vim.cmd(string.format([[highlight Headline4Bg guifg=%s guibg=%s gui=bold]], color_fg, color4_bg))
--- vim.cmd(string.format([[highlight Headline5Bg guifg=%s guibg=%s gui=bold]], color_fg, color5_bg))
--- vim.cmd(string.format([[highlight Headline6Bg guifg=%s guibg=%s gui=bold]], color_fg, color6_bg))
+-- Heading backgrounds. Re-applied on ColorScheme because `:colorscheme`
+-- (run in init.lua after plugins load) clears custom highlight groups.
+local function set_headline_hl()
+  for i, bg in ipairs({ color1_bg, color2_bg, color3_bg, color4_bg, color5_bg, color6_bg }) do
+    vim.api.nvim_set_hl(0, "Headline" .. i .. "Bg", { fg = color_fg, bg = bg, bold = true })
+  end
+end
+set_headline_hl()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = set_headline_hl })
 
 require("render-markdown").setup({
-  file_types = { "markdown", "nofile", "noice" },
+  file_types = { "markdown" },
   -- Render markdown inside blink.cmp completion/documentation popups
   -- (replaces the removed win_config.floating.rendered_by_cmp option)
   completions = {
