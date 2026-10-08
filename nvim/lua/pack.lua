@@ -27,7 +27,6 @@ vim.pack.add({
   { src = "https://github.com/folke/snacks.nvim" },
   { src = "https://github.com/folke/trouble.nvim" },
   { src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
-  { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/saghen/filler-begone.nvim" },
 
   -- Search
@@ -117,6 +116,7 @@ require("lsp.lspconfig")
 require("plugins.csharp-config")
 require("plugins.kotlin-config")
 require("plugins.rust-config")
+require("plugins.swift-config")
 
 require("plugins.trouble")
 require("plugins.todo-comments")

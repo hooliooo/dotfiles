@@ -2,8 +2,11 @@ require("snacks").setup({
   -- The picker settings from your opts
   picker = {
     enabled = true, -- Must be enabled to use it
-    hidden = true,
-    ignored = true,
+    -- Search pickers skip hidden/gitignored files (toggle with <A-h>/<A-i>);
+    -- the explorer shows everything (toggle with H/I)
+    sources = {
+      explorer = { hidden = true, ignored = true },
+    },
     exclude = {
       ".DS_Store",
     },

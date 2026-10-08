@@ -28,19 +28,24 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     opts.desc = "Restart LSP"
     vim.keymap.set("n", "<leader>rs", ":lsp restart<CR>", opts)
+  end,
+})
 
+-- sourcekit-lsp returns no inlay hints until it has indexed the file and doesn't
+-- ask for a refresh afterwards, so re-request them whenever its indexing ends
+vim.api.nvim_create_autocmd("LspProgress", {
+  group = vim.api.nvim_create_augroup("UserSourcekitInlayHints", {}),
+  pattern = "end",
+  callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if client and client.name == "sourcekit" then
-      vim.defer_fn(function()
-        if vim.api.nvim_buf_is_valid(ev.buf) then
-          vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf })
-          vim.defer_fn(function()
-            if vim.api.nvim_buf_is_valid(ev.buf) then
-              vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-            end
-          end, 200)
-        end
-      end, 4000)
+    if not client or client.name ~= "sourcekit" then
+      return
+    end
+    for _, buf in ipairs(vim.lsp.get_buffers_by_client_id(client.id)) do
+      if vim.lsp.inlay_hint.is_enabled({ bufnr = buf }) then
+        vim.lsp.inlay_hint.enable(false, { bufnr = buf })
+        vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+      end
     end
   end,
 })

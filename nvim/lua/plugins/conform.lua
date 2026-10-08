@@ -6,7 +6,7 @@ require("conform").setup({
     kotlin = { "ktlint" },
     -- This merges your previous setup:
     rust = { "trim_whitespace", "rustfmt", lsp_format = "fallback" },
-    swift = { "swiftformat" },
+    swift = { "swift" }, -- Apple's swift-format, via `swift format`
   },
   formatters = {
     csharpier = {

@@ -17,6 +17,7 @@ wk.add({
   { "<leader>r", group = "rust/restart" },
   { "<leader>s", group = "search" },
   { "<leader>u", group = "ui" },
+  { "<leader>w", group = "swift" },
   { "<leader>x", group = "diagnostics/quickfix" },
 })
 
