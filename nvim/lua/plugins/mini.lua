@@ -14,15 +14,16 @@ require("mini.icons").mock_nvim_web_devicons()
 
 -- Sessions: one per working directory, stored in stdpath("data")/session.
 -- The active session is rewritten on exit.
-require("mini.sessions").setup({ autowrite = true })
+local sessions = require("mini.sessions")
+sessions.setup({ autowrite = true })
 
 local function session_name()
   return (vim.fn.getcwd():gsub("[/\\:]", "%%"))
 end
 
 -- stylua: ignore start
-vim.keymap.set("n", "<leader>qs", function() MiniSessions.write(session_name()) end, { desc = "Save session (cwd)" })
-vim.keymap.set("n", "<leader>qr", function() MiniSessions.read(session_name()) end, { desc = "Restore session (cwd)" })
-vim.keymap.set("n", "<leader>ql", function() MiniSessions.select("read") end, { desc = "Pick session" })
-vim.keymap.set("n", "<leader>qd", function() MiniSessions.select("delete") end, { desc = "Delete session" })
+vim.keymap.set("n", "<leader>qs", function() sessions.write(session_name()) end, { desc = "Save session (cwd)" })
+vim.keymap.set("n", "<leader>qr", function() sessions.read(session_name()) end, { desc = "Restore session (cwd)" })
+vim.keymap.set("n", "<leader>ql", function() sessions.select("read") end, { desc = "Pick session" })
+vim.keymap.set("n", "<leader>qd", function() sessions.select("delete") end, { desc = "Delete session" })
 -- stylua: ignore end

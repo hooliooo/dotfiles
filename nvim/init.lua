@@ -6,6 +6,8 @@ require("vim._core.ui2").enable({
   enable = true,
   msg = {
     target = "cmd",
+    -- LSP/task progress goes to the floating msg window (bottom right) instead
+    targets = { progress = "msg" },
     pager = { height = 0.5 },
     dialog = { height = 0.5 },
     cmd = { height = 0.5 },

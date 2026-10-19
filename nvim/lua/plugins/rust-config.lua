@@ -2,6 +2,87 @@
 -- The DAP adapter is not configured here: rustaceanvim auto-detects
 -- Mason's codelldb (and falls back to codelldb/lldb-dap on PATH).
 
+-- Show the release-build assembly of the function under the cursor via
+-- cargo-show-asm (`cargo install cargo-show-asm`), with Rust source interleaved
+local function show_asm()
+  local node = vim.treesitter.get_node()
+  while node and node:type() ~= "function_item" do
+    node = node:parent()
+  end
+  local name_node = node and node:field("name")[1]
+  if not name_node then
+    vim.notify("Cursor is not inside a function", vim.log.levels.WARN)
+    return
+  end
+  local fn_name = vim.treesitter.get_node_text(name_node, 0)
+
+  local file = vim.api.nvim_buf_get_name(0)
+  local root = vim.fs.root(file, "Cargo.toml")
+  local pkg = root and vim.fn.readfile(vim.fs.joinpath(root, "Cargo.toml"))
+  local pkg_name
+  for _, line in ipairs(pkg or {}) do
+    pkg_name = pkg_name or line:match('^name%s*=%s*"([^"]+)"')
+  end
+  if not pkg_name then
+    vim.notify("No [package] Cargo.toml found for this file", vim.log.levels.WARN)
+    return
+  end
+
+  -- Pick the artifact the file belongs to: src/main.rs or src/bin/* -> binary, else the lib
+  local rel = file:sub(#root + 2)
+  local bin = rel:match("^src/bin/([^/]+)%.rs$") or rel:match("^src/bin/([^/]+)/main%.rs$")
+  if rel == "src/main.rs" then
+    bin = pkg_name
+  end
+  local base = { "cargo", "asm", "-p", pkg_name, bin and ("--bin=" .. bin) or "--lib" }
+
+  -- With no filter cargo asm lists every function as `<index> "<path>" [<lines>]`
+  vim.notify("cargo asm: building " .. pkg_name .. " (release)...")
+  vim.system(base, { cwd = root, text = true }, function(res)
+    vim.schedule(function()
+      local out = (res.stdout or "") .. (res.stderr or "")
+      if res.code ~= 0 and not out:find("Try one of those") then
+        vim.notify("cargo asm failed:\n" .. out, vim.log.levels.ERROR)
+        return
+      end
+      local matches = {}
+      for idx, path in out:gmatch('\n(%d+) "([^"]+)"') do
+        if path:sub(-(#fn_name + 2)) == "::" .. fn_name then
+          table.insert(matches, { idx = idx, path = path })
+        end
+      end
+      local function open(m)
+        vim.cmd("botright vnew")
+        vim.fn.jobstart(vim.list_extend(vim.deepcopy(base), { "--rust", "--simplify", m.idx }), { cwd = root, term = true })
+      end
+      if not out:find("Try one of those") then
+        -- Only one function in the artifact: cargo asm printed it directly
+        open({})
+      elseif #matches == 0 then
+        vim.notify(
+          ("No assembly for `%s` in the release build: it was inlined (small functions are, even `pub` ones) or is unused. Add #[inline(never)] to see it"):format(
+            fn_name
+          ),
+          vim.log.levels.WARN
+        )
+      elseif #matches == 1 then
+        open(matches[1])
+      else
+        vim.ui.select(matches, {
+          prompt = "Function",
+          format_item = function(m)
+            return m.path
+          end,
+        }, function(m)
+          if m then
+            open(m)
+          end
+        end)
+      end
+    end)
+  end)
+end
+
 -- This global variable IS the configuration for rustaceanvim
 vim.g.rustaceanvim = {
   tools = {
@@ -43,6 +124,7 @@ vim.g.rustaceanvim = {
       map("n", "<leader>rp", rust("parentModule"), "Parent module")
       map("n", "<leader>rk", rust("moveItem", "up"), "Move item up")
       map("n", "<leader>rj", rust("moveItem", "down"), "Move item down")
+      map("n", "<leader>rA", show_asm, "Show assembly (release)")
       -- stylua: ignore end
     end,
     default_settings = {

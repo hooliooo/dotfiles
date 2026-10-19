@@ -50,12 +50,23 @@ vim.api.nvim_create_autocmd("LspProgress", {
   end,
 })
 
+-- The progress window only ever grows to fit its widest line, so keep messages
+-- short: paths (e.g. rust-analyzer's "Roots Scanned") become their last
+-- component, and anything still too long is cut off
+local function short_progress(msg)
+  msg = (msg or "done"):gsub("/%S*/([^/%s]+)", "%1")
+  if vim.fn.strdisplaywidth(msg) > 40 then
+    msg = vim.fn.strcharpart(msg, 0, 39) .. "…"
+  end
+  return msg
+end
+
 -- Show LSP progress (e.g. indexing) as native progress messages
 vim.api.nvim_create_autocmd("LspProgress", {
   group = vim.api.nvim_create_augroup("UserLspProgress", {}),
   callback = function(ev)
     local value = ev.data.params.value
-    vim.api.nvim_echo({ { value.message or "done" } }, false, {
+    vim.api.nvim_echo({ { short_progress(value.message) } }, false, {
       id = "lsp." .. ev.data.params.token,
       kind = "progress",
       source = "vim.lsp",
