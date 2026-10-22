@@ -23,8 +23,12 @@ require("conform").setup({
     if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
-    -- Leave Cargo.toml as written (taplo would reformat it); <leader>cf still works
+    -- Leave Cargo.toml and config files as written (their LSPs would reformat them on
+    -- save); <leader>cf still formats them on demand
     if vim.fs.basename(vim.api.nvim_buf_get_name(bufnr)) == "Cargo.toml" then
+      return
+    end
+    if vim.tbl_contains({ "json", "jsonc", "yaml", "dockerfile" }, vim.bo[bufnr].filetype) then
       return
     end
     return { timeout_ms = 2500, lsp_format = "fallback" }

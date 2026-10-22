@@ -137,10 +137,33 @@ vim.lsp.config("sourcekit", {
   end,
 })
 
+-- jsonls: validate common config files against their SchemaStore schemas
+-- (yamlls does this on its own via SchemaStore's catalog)
+vim.lsp.config("jsonls", {
+  settings = {
+    json = {
+      validate = { enable = true },
+      schemas = {
+        {
+          fileMatch = { "appsettings.json", "appsettings.*.json" },
+          url = "https://json.schemastore.org/appsettings.json",
+        },
+        { fileMatch = { "launchSettings.json" }, url = "https://json.schemastore.org/launchsettings.json" },
+        { fileMatch = { "global.json" }, url = "https://json.schemastore.org/global.json" },
+        { fileMatch = { "package.json" }, url = "https://json.schemastore.org/package.json" },
+        { fileMatch = { "tsconfig*.json" }, url = "https://json.schemastore.org/tsconfig.json" },
+      },
+    },
+  },
+})
+
 vim.lsp.enable({
   "lua_ls",
   "sourcekit",
   "taplo",
+  "jsonls",
+  "yamlls",
+  "dockerls",
 })
 
 vim.lsp.inlay_hint.enable(true)

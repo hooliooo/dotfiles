@@ -18,11 +18,11 @@
       "src": "https://github.com/saecki/crates.nvim"
     },
     "easy-dotnet.nvim": {
-      "rev": "19974e83b046aee8e722d27adad06e9f9ccf6499",
+      "rev": "e698b942a0a91cd5b457b828d16a66b7cb94d732",
       "src": "https://github.com/GustavEikaas/easy-dotnet.nvim"
     },
     "filler-begone.nvim": {
-      "rev": "122018c0f54519b9ee16fb0e31b96989a7682e1c",
+      "rev": "0946377b673677d0f86a7e96a17e89f63a46096d",
       "src": "https://github.com/saghen/filler-begone.nvim"
     },
     "friendly-snippets": {
@@ -30,19 +30,19 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "gitsigns.nvim": {
-      "rev": "fd780920613e541cbdfac41bf711583ed49f9249",
+      "rev": "683137003522aebd6948358334164a6ba2ca7cd5",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "grug-far.nvim": {
-      "rev": "11595bf747edc270bce2069d1020502ad4ae56cf",
+      "rev": "91b7e58b6ffc6ddad5acb7a7c1df21257724449e",
       "src": "https://github.com/magicduck/grug-far.nvim"
     },
     "kotlin.nvim": {
-      "rev": "d942826d58d25418da267ddd8b9a629dde95f44e",
+      "rev": "bc8ed5523db7e0ec2c00e26a17858e4c54d86072",
       "src": "https://github.com/AlexandrosAlexiou/kotlin.nvim"
     },
     "live-preview.nvim": {
-      "rev": "a6307fa340ed7c0d96f5c567afc8c991aad94ce0",
+      "rev": "dad92ae9599f9b19a7dffe7d597d3376c110b818",
       "src": "https://github.com/brianhuster/live-preview.nvim"
     },
     "lualine.nvim": {
@@ -58,7 +58,7 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "295af26358628c8ba8f007ff6a7e0aec2f642a31",
+      "rev": "a6e23131010b800ecbab85fa6adc0ff38eae2c2d",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-dap": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/theHamsta/nvim-dap-virtual-text"
     },
     "nvim-lspconfig": {
-      "rev": "45a3a444b710511c39abca3b60bb6e23a21e3de5",
+      "rev": "77b7432d4770d23b277d37923e5a08a442d8bb07",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-nio": {
@@ -82,7 +82,7 @@
       "src": "https://github.com/nvim-neotest/nvim-nio"
     },
     "nvim-treesitter": {
-      "rev": "ca581c3436fc2b236847f5b739ebc263739e5ca6",
+      "rev": "29212d826054bb2948fa9d3a99eca9bf6a050eb2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },

@@ -18,15 +18,20 @@ local ensure_installed = {
   "markdown_inline",
   "regex",
   "rust",
+  "sql",
   "swift",
   "toml",
   "tsx",
   "typescript",
   "vim",
+  "xml",
   "yaml",
 }
 
 treesitter.install(ensure_installed)
+
+-- JSON with comments (jsonc) uses the json parser, which already handles comments
+vim.treesitter.language.register("json", "jsonc")
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",

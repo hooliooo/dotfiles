@@ -9,7 +9,11 @@ require("easy-dotnet").setup({
     -- Registers dap.configurations.cs with build-before-debug and
     -- launchSettings.json launch-profile env vars
     auto_register_dap = true,
-    bin_path = vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "bin", "netcoredbg"),
+    -- Mason's netcoredbg is x86_64-only (pinned to 3.1.3, mason-registry PR #15719), which
+    -- cannot run on Apple Silicon without Rosetta nor debug the arm64 runtime. This is the
+    -- native osx-arm64 build of Samsung/netcoredbg 3.2.0-1092, installed by hand. Back to
+    -- Mason once that PR lands.
+    bin_path = vim.fs.joinpath(vim.fn.stdpath("data"), "netcoredbg", "netcoredbg"),
   },
   test_runner = {
     -- Buffer-local maps in test files. The defaults (<leader>r/d/t/p) would
@@ -20,6 +24,20 @@ require("easy-dotnet").setup({
       debug_test_from_buffer = { lhs = "<leader>ntd", desc = "Debug test under cursor" },
       peek_stack_trace_from_buffer = { lhs = "<leader>ntp", desc = "Peek test stacktrace" },
     },
+  },
+})
+
+-- easy-dotnet marks the .NET settings files as json5. They are JSON with comments, i.e.
+-- jsonc, which jsonls understands (schema validation) and the json parser highlights.
+-- Same keys as easy-dotnet's, so these replace its mappings.
+vim.filetype.add({
+  filename = {
+    ["appsettings.json"] = "jsonc",
+    ["launchSettings.json"] = "jsonc",
+    ["secrets.json"] = "jsonc",
+  },
+  pattern = {
+    ["appsettings%.%a+%.json"] = "jsonc",
   },
 })
 

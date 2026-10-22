@@ -20,10 +20,12 @@ mason_tool_installer.setup({
   ensure_installed = {
     "codelldb",
     "csharpier",
+    "dockerfile-language-server",
+    "json-lsp",
     "ktlint",
     "lua-language-server",
-    "netcoredbg",
     "roslyn",
     "taplo",
+    "yaml-language-server",
   },
 })
