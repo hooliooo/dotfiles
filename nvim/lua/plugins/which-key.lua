@@ -11,13 +11,14 @@ wk.add({
   { "<leader>d", group = "debug" },
   { "<leader>f", group = "file/find" },
   { "<leader>g", group = "git" },
+  { "<leader>i", group = "iOS/xcodebuild" },
   { "<leader>n", group = ".NET" },
   { "<leader>q", group = "session" },
   { "<leader>nt", group = "test" },
   { "<leader>r", group = "rust" },
   { "<leader>s", group = "search" },
   { "<leader>u", group = "ui" },
-  { "<leader>w", group = "swift" },
+  { "<leader>w", group = "swift (SwiftPM)" },
   { "<leader>x", group = "diagnostics/quickfix" },
 })
 

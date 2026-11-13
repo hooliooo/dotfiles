@@ -78,10 +78,32 @@ local function run_task(title, cmd, root)
   end)
 end
 
-local function swift_run(root)
+local function in_terminal(root, cmd)
   vim.cmd("botright 15new")
-  vim.fn.jobstart({ "swift", "run" }, { cwd = root, term = true })
+  vim.fn.jobstart(cmd, { cwd = root, term = true })
   vim.cmd("startinsert")
+end
+
+-- Benchmarks via ordo-one/package-benchmark (the package must depend on it)
+local function benchmark(root)
+  local actions = { "run", "baseline update", "baseline compare" }
+  vim.ui.select(actions, { prompt = "swift package benchmark" }, function(action)
+    if action == "run" then
+      in_terminal(root, { "swift", "package", "benchmark" })
+    elseif action then
+      vim.ui.input({ prompt = "Baseline name: ", default = "main" }, function(name)
+        if not name or name == "" then
+          return
+        end
+        local cmd = { "swift", "package" }
+        if action == "baseline update" then
+          table.insert(cmd, "--allow-writing-to-package-directory")
+        end
+        vim.list_extend(cmd, { "benchmark", "baseline", action:match("%S+$"), name })
+        in_terminal(root, cmd)
+      end)
+    end
+  end)
 end
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -94,7 +116,8 @@ vim.api.nvim_create_autocmd("FileType", {
     -- stylua: ignore start
     map("<leader>wb", function() local r = package_root(); if r then run_task("swift build", { "swift", "build" }, r) end end, "Build (quickfix)")
     map("<leader>wt", function() local r = package_root(); if r then run_task("swift test", { "swift", "test" }, r) end end, "Test (quickfix)")
-    map("<leader>wr", function() local r = package_root(); if r then swift_run(r) end end, "Run in terminal")
+    map("<leader>wr", function() local r = package_root(); if r then in_terminal(r, { "swift", "run" }) end end, "Run in terminal")
+    map("<leader>wB", function() local r = package_root(); if r then benchmark(r) end end, "Benchmarks")
     map("<leader>wl", function()
       -- Lint also works outside SwiftPM (e.g. Xcode projects with a .swiftlint.yml)
       local r = vim.fs.root(0, { "Package.swift", ".swiftlint.yml", ".git" }) or vim.fn.getcwd()
@@ -113,10 +136,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Debugging: lldb-dap ships with Xcode
+-- Debugging: lldb-dap ships with Xcode. Its own adapter name, since xcodebuild.nvim
+-- registers "lldb-dap" for iOS apps (as a server on a fixed port)
 local dap = require("dap")
 
-dap.adapters["lldb-dap"] = {
+dap.adapters["swiftpm-lldb-dap"] = {
   type = "executable",
   command = "xcrun",
   args = { "lldb-dap" },
@@ -170,10 +194,11 @@ local function build_and_pick_executable()
   return choice and vim.fs.joinpath(bin, choice) or dap.ABORT
 end
 
-dap.configurations.swift = {
+-- Appended: xcodebuild.nvim's "iOS App Debugger" (set in ios-config) must stay first
+dap.configurations.swift = vim.list_extend(dap.configurations.swift or {}, {
   {
-    name = "Build and debug executable",
-    type = "lldb-dap",
+    name = "SwiftPM: build and debug executable",
+    type = "swiftpm-lldb-dap",
     request = "launch",
     program = build_and_pick_executable,
     cwd = "${workspaceFolder}",
@@ -181,11 +206,11 @@ dap.configurations.swift = {
     stopOnEntry = false,
   },
   {
-    name = "Attach to process",
-    type = "lldb-dap",
+    name = "SwiftPM: attach to process",
+    type = "swiftpm-lldb-dap",
     request = "attach",
     pid = function()
       return require("dap.utils").pick_process()
     end,
   },
-}
+})

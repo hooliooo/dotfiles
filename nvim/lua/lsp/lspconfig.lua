@@ -132,7 +132,9 @@ vim.lsp.config("sourcekit", {
   root_dir = function(bufnr, on_dir)
     local fname = vim.api.nvim_buf_get_name(bufnr)
     local dir = vim.fs.dirname(fname)
-    local root = vim.fs.root(dir, { "Package.swift" }) or vim.fs.root(dir, { "buildServer.json" }) or vim.fs.root(dir, { ".git" })
+    -- buildServer.json (written by xcodebuild.nvim for Xcode projects) wins, so local
+    -- packages inside an app repo are indexed together with the app
+    local root = vim.fs.root(dir, { "buildServer.json" }) or vim.fs.root(dir, { "Package.swift" }) or vim.fs.root(dir, { ".git" })
     on_dir(root)
   end,
 })

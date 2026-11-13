@@ -72,6 +72,26 @@ lualine.setup({
     lualine_b = { branch },
     lualine_c = { diff, filename },
     lualine_x = {
+      -- xcodebuild.nvim: last build/test status and the selected device
+      {
+        function()
+          return vim.g.xcodebuild_last_status
+        end,
+        cond = function()
+          return vim.g.xcodebuild_last_status ~= nil
+        end,
+        color = { fg = colors.color7 },
+      },
+      {
+        function()
+          local os = vim.g.xcodebuild_os and (" (" .. vim.g.xcodebuild_os .. ")") or ""
+          return " " .. vim.g.xcodebuild_device_name .. os
+        end,
+        cond = function()
+          return vim.g.xcodebuild_device_name ~= nil
+        end,
+        color = { fg = "#e0af68" },
+      },
       {
         function()
           return "󰏗"

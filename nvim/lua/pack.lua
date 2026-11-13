@@ -75,6 +75,9 @@ vim.pack.add({
     version = vim.version.range("^9"),
   },
   { src = "https://github.com/saecki/crates.nvim" },
+  ---- Swift / iOS (xcodebuild, simulator, tests, coverage); nui renders the coverage report
+  { src = "https://github.com/wojciech-kulik/xcodebuild.nvim" },
+  { src = "https://github.com/MunifTanjim/nui.nvim" },
 
   -- PlantUML
   { src = "https://github.com/charlesnicholson/plantuml.nvim" },
@@ -117,6 +120,9 @@ require("lsp.lspconfig")
 require("plugins.csharp-config")
 require("plugins.kotlin-config")
 require("plugins.rust-config")
+-- ios-config first: xcodebuild.nvim's DAP setup replaces dap.configurations.swift,
+-- and swift-config appends its SwiftPM configurations after it
+require("plugins.ios-config")
 require("plugins.swift-config")
 
 require("plugins.trouble")
